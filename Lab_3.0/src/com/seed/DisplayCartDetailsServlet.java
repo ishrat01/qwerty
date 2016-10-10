@@ -54,9 +54,14 @@ public class DisplayCartDetailsServlet extends HttpServlet {
 //		TODO:1	Retrieve attribute named as "shoppingCart" from session scope,
 //		and assign it to "cartRef" local variable
 
-
+		cartRef=(ShoppingCart)session.getAttribute("shoppingCart") ;
+		
 //		TODO:2 If the attribute(shoppingCart) exists, retrieve product ids from it.
 		
+		if(cartRef!=null)
+		{
+			request.getParameterValues("ids") ;
+		}
 //		TODO:3 If the attribute(shoppingCart) exists, retrieve product ids from it.
 		
 //		TODO:4	Scan all productids retrieved from Cart and maintain a list of corresponding products	
