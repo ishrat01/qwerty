@@ -1,30 +1,42 @@
-<%@page import="java.io.PrintWriter"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Menu</title>
 </head>
 <body>
-<h2>Showing Headers<br><br>
-<%@page import="java.util.Enumeration" %>
-<%! HttpServletRequest request ;//can be declared here because it defines class variables and not local variables of the function
+<h2>Select an operation to be performed</h2>
+<%@ page import="java.sql.*" %>
+<%int c=0 ;
+    try{
+    	
+Class.forName("com.mysql.jdbc.Driver").newInstance();
+Connection connection = 
+         DriverManager.getConnection
+            ("jdbc:mysql://localhost:8889/MeetingManagement","root","root");
 
-PrintWriter out ;
+       Statement statement = connection.createStatement() ;
+       out.println("nothing is null here") ;
+       out.write("Nothing is null") ;
+ResultSet resultset = null ;
+       resultset =statement.executeQuery("select User,Password from User") ;
+      
+    }catch(Exception e)
+    {
+    	e.printStackTrace() ;
+    }
+      %>  
+<form action="Hello">
+<a href="Hello?action=add">Add an Employee
+<a href="Hello?action=modify">Modify an existing employee
+<a href="Hello?action=search">Search for an Employee
+<a href="Hello?action=remove">Remove an Employee
+<a href="Hello?action=view">View all Employees
 
-%>
-<% Enumeration e =request.getHeaderNames() ;
-	while(e.hasMoreElements())
-	{
-		String name=(String)e.nextElement() ;
-		out.println(" Header Name - "+name+" Header Vale - "+request.getHeader(name)) ;
-		out.println() ;
-	}
-%>
-<br><br>
+<input type="submit" name="submit">
+</form>
 
-</h2>
 </body>
 </html>
