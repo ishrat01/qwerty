@@ -1,10 +1,16 @@
 package com.seed;
 
+
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +22,7 @@ import com.seed.util.ProductsRepository;
 import com.seed.util.ProductsRepositoryInMemoryImpl;
 
 //TODO:0	Modification required
+@WebServlet("/displayDetails")
 public class DisplayCartDetailsServlet extends HttpServlet {
 	private Map<Integer, Product> productEntries;
 	
@@ -41,7 +48,7 @@ public class DisplayCartDetailsServlet extends HttpServlet {
 		
 		PrintWriter out = response.getWriter();
 		ShoppingCart cartRef = null;
-
+		Set<Integer> idsSet=new TreeSet<Integer>();
 //		Don't create a new session, if it is already expired
 		HttpSession session = request.getSession(false);
 
@@ -53,21 +60,61 @@ public class DisplayCartDetailsServlet extends HttpServlet {
 		
 //		TODO:1	Retrieve attribute named as "shoppingCart" from session scope,
 //		and assign it to "cartRef" local variable
+		cartRef=(ShoppingCart) session.getAttribute("shoppingCart") ;
 
-		cartRef=(ShoppingCart)session.getAttribute("shoppingCart") ;
-		
 //		TODO:2 If the attribute(shoppingCart) exists, retrieve product ids from it.
 		
 		if(cartRef!=null)
 		{
-			request.getParameterValues("ids") ;
+			//out.println("carRef not null") ;
+			idsSet=cartRef.getProductSet() ;
+			ArrayList<Product> products=new ArrayList<Product>() ;
+			for(Integer id:idsSet)
+			{
+				products.add(productEntries.get(id)) ;
+			}
+			response.setContentType("text/html");
+			out.print("<html>");
+			out.print("<body>");
+			out.print("<table>");
+			out.print("<tr>");
+			out.print("<td>");
+			out.println("ProductID");
+			out.print("</td>");
+			out.print("<td>");
+			out.println("Product Name");
+			out.print("</td>");
+			out.print("</tr>");
+			for(Product p:products)
+			{
+				
+				out.print("<tr>");
+				out.print("<td>");
+				out.println(p.getId());
+				out.print("</td>");
+				out.print("<td>");
+				out.print(p.getName());
+				out.print("</td>");
+				out.print("</tr>") ;
+			}
+			out.print("</table>");
+			out.print("</body>");
+			out.print("</html>");
+			
+			
 		}
+		else
+		{
+			out.println("carRef  null") ;
+		}
+		
 //		TODO:3 If the attribute(shoppingCart) exists, retrieve product ids from it.
 		
 //		TODO:4	Scan all productids retrieved from Cart and maintain a list of corresponding products	
 //		Note: You can get details of product(value) based on productid(key) 
-//		using member variable "productEntries"		
-			
+//		using member variable "productEntries"	
+		
+		
 //		TODO:5	display product details in tabular format as HTTP response(text/html) to the web-client
 			
 	}
